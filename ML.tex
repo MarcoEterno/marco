@@ -1,0 +1,129 @@
+%!TeX encoding = utf8
+%!TeX spellcheck = it_IT
+
+\documentclass[a4paper, 11pt]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry, emptypage}
+\usepackage{graphicx, subfig}
+\usepackage{enumitem, lipsum}
+\usepackage{marginnote}
+%\usepackage[autostyle,italian=guillemets]{csquotes}
+\usepackage[style=philosophy-modern, backend=biber, square, hyperref, backref]{biblatex}
+\usepackage{listings}
+\usepackage[eulerchapternumbers, palatino=false, parts=false]{classicthesis}
+\usepackage{arsclassica}
+
+% Font
+%\IfFileExists{MinionPro.sty}{
+%	\usepackage[noopticals, mathlf, minionint, loosequotes]{MinionPro}
+%	\usepackage[toc, enum]{tabfigures}
+%	\usepackage{relsize}
+%	\let\oldsum\sum\let\oldprod\prod
+%	\def\sum{\mathlarger{\oldsum}}%
+%	\def\prod{\mathlarger{\oldprod}}
+%}{
+	\usepackage[proportional, oldstyle]{cochineal}
+	\usepackage[cochineal, vvarbb]{newtxmath}
+%}
+
+% Figures
+\graphicspath{{Figures/}}
+\captionsetup{format=hang}
+
+% Layout
+\geometry{%showframe,
+	width=30pc, height=54pc, vmarginratio=1000:1414}
+\setlength\parindent{1em}
+\newcommand\setupheading[1]{%
+	\cleardoublepage\phantomsection
+	\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}%
+}
+
+% Bibliography
+%\addbibresource{Bibliography.bib}
+%\renewcommand*{\nameyeardelim}{\addcomma\space}
+
+% Headings
+\renewcommand{\sectionmark}[1]{
+	\markright{\thesection\enspace\textit{#1}}
+} 
+\clearplainofpairofpagestyles
+
+% Code
+\lstset{language=C,
+ 	basicstyle=\ttfamily\small,
+	keywordstyle=\color{RoyalBlue},
+	commentstyle=\color{black!20!Emerald}\footnotesize\itshape,
+	columns=flexible,
+	aboveskip=\bigskipamount,
+	stringstyle=\color{Orange},
+	numbers=none,
+	tabsize=4,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ftff,
+	frame=lines,
+	backgroundcolor=\color{white},%\color[gray]{.99},
+	escapeinside={£}{£},
+	extendedchars=true,
+	literate={à}{{\`a}}1 {è}{{\`e}}1 {ù}{{\`u}}1 {ö}{{\"o}}1
+}
+
+% Theorems
+\newtheoremstyle{plain}{}{}{\itshape}{}{}{}{ }{%
+	\textbf{\thmname{#1}\thmnumber{ #2.}}\thmnote{ (#3).}}
+\newtheoremstyle{definition}{}{}{}{}{}{}{ }{%
+	\textbf{\thmname{#1}\thmnumber{ #2.}}\thmnote{ (#3).}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorema}[chapter]
+\newtheorem{corollary}[theorem]{Corollario}
+\newtheorem{proposition}[theorem]{Proposizione}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definizione}
+\newtheorem{remark}[theorem]{Osservazione}
+\newtheorem{example}[theorem]{Esempio}
+
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+% Other
+\hypersetup{%hidelinks,
+	linkcolor=RoyalBlue}
+\microtypesetup{kerning=true}
+\let\marginpar\marginnote
+\setlist{itemsep=0pt}
+
+% Dates
+\usepackage{Files/datemath}
+\newdate{lecture}
+\setdaynames{domenica}{luned\`i}{marted\`i}{mercoled\`i}{gioved\`i}{venerd\`i}{sabato}
+\setmonthnames{gennaio}{febbraio}{marzo}{aprile}{maggio}{giugno}{luglio}
+	{agosto}{settembre}{ottobre}{novembre}{dicembre}
+\newcommand\lecture[1]{%
+	\setdate{lecture}{#1/2019}%
+	\calcdayofweek{lecture}%
+	\section{Lezione di \dayofweek{lecture} \theday{lecture} \monthname{lecture}}%
+}
+
+\begin{document}
+
+\mainmatter
+
+\input{Files/Frontpage}
+\input{Files/Contents}
+
+\chapter{Esempi}
+
+\lipsum[2]
+
+\input{Lezioni/0924}
+
+\end{document}

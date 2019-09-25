@@ -1,0 +1,332 @@
+
+% Francesco Zigliotto
+% The datemath package
+
+% Macros: \d@<...>
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesFile{datemath}[2013/12/25 v2.0 Date calcs]
+
+\newif\ifd@dmy
+\DeclareOption{d/m/y}{\d@dmytrue}
+\DeclareOption{y/m/d}{\d@dmyfalse}
+\ExecuteOptions{d/m/y}
+\ProcessOptions
+
+\RequirePackage{etex}
+\RequirePackage{calc}
+
+\def\truncdiv#1#2{((#1-(#2-1)/2)/#2)}
+\def\d@mod(#1)#2{\number\numexpr#2-\truncdiv{#2}{#1}*#1}
+\providecommand*\@nameedef[1]{\expandafter\edef\csname#1\endcsname}
+
+%******************************************************************
+% Syntax control
+%******************************************************************
+
+\def\d@und@err#1{\PackageError{datemath}{Undefined date `#1'}{%
+	You have to define a date, before using it,\MessageBreak
+	e.g. using \string\newdate{#1}.}}
+\def\d@syntax@err#1{\PackageError{datemath}{Wrong date syntax `#1'}{%
+	The correct syntax of a date should be: `d/m/y'.}}
+\def\d@def@err#1{\PackageError{datemath}{Date already defined `#1'}{%
+	Please control whether you have already typed something like
+	\MessageBreak `\string\newdate{#1}' or (most unlikely)
+	`\string\@namedef{date@#1}{}'.}}
+\def\d@add@err#1{\PackageError{datemath}{%
+	Undefined optional argument `#1'}{%
+	The allowed optional arguments of \string\addtodate\space
+	command \MessageBreak are `days' `months' `years'.}}
+
+\def\d@syntax#1#2{%
+	\edef\d@test{[#1/@/@/@]}%
+	\expandafter\d@test@assign\d@test
+	\ifx\d@test@@\d@complete#2\else\d@syntax@err{#1}\fi}
+
+\def\d@complete{@/@/@}
+\def\d@test@assign[#1/#2/#3/#4]{%
+	\edef\d@test@nums{\number\numexpr#1#2#3}\def\d@test@@{#4}}
+
+\def\d@exists#1#2{\@ifundefined{date@#1}{\d@und@err{#1}}{#2}}
+
+%******************************************************************
+% Days of month and year
+%******************************************************************
+
+\def\d@ifleapyear#1#2#3{%
+	\ifnum\numexpr\d@mod(4){\theyear{#1}}=\z@
+		\ifnum\numexpr\d@mod(100){\theyear{#1}}=\z@
+			\ifnum\numexpr\d@mod(400){\theyear{#1}}=\z@#2
+			\else#3\fi
+		\else#2\fi
+	\else#3\fi}
+
+\def\d@daysofyear#1{\d@ifleapyear{#1}{366}{365}}
+
+\def\d@daysofmonth#1{%
+	\ifcase\themonth{#1}%
+		\or31\or\d@ifleapyear{#1}{29}{28}%
+		\or31\or30\or31\or30\or31\or31\or30\or31\or30\or31\fi}
+
+%******************************************************************
+% Date manage
+%******************************************************************
+
+\long\def\d@loop#1\d@repeat{%
+	\def\d@iterate{#1\relax\expandafter\d@iterate\fi}%
+	\d@iterate\let\d@iterate\relax}
+\let\d@repeat\fi
+
+\def\d@make#1{%
+	\d@loop\ifnum\themonth{#1}>12
+		\addtocounter{dm@#1}{-12}%
+		\stepcounter{dy@#1}%
+	\d@repeat
+	\d@loop\ifnum\themonth{#1}<\z@
+		\addtocounter{dm@#1}{12}%
+		\addtocounter{dy@#1}{\m@ne}%
+	\d@repeat
+	\ifnum\themonth{#1}=\z@
+		\setcounter{dm@#1}{12}%
+		\addtocounter{dy@#1}{\m@ne}%
+	\fi
+	\d@loop\ifnum\theday{#1}>\d@daysofmonth{#1}
+		\addtocounter{dd@#1}{-\d@daysofmonth{#1}}%
+		\stepcounter{dm@#1}%
+		\ifnum\themonth{#1}=13
+			\setcounter{dm@#1}{\@ne}%
+			\stepcounter{dy@#1}%
+		\fi%
+	\d@repeat
+	\d@loop\ifnum\theday{#1}<\@ne
+		\addtocounter{dm@#1}{\m@ne}%
+		\ifnum\themonth{#1}=\z@
+			\setcounter{dm@#1}{12}%
+			\addtocounter{dy@#1}{\m@ne}%
+		\fi
+		\addtocounter{dd@#1}{\d@daysofmonth{#1}}%
+	\d@repeat
+	\calcdayofweek{#1}}
+
+%******************************************************************
+% New dates
+%******************************************************************
+
+\newcommand*\newdate[1]{%
+	\@ifundefined{date@#1}{%
+		\newcounter{dd@#1}%
+		\newcounter{dm@#1}%
+		\newcounter{dy@#1}%
+		\global\@namedef{date@#1}{}}
+	{\d@def@err{#1}}}
+
+\newcommand*\providedate[1]{%
+	\@ifundefined{date@#1}{\newdate{#1}}{}}
+
+%******************************************************************
+% Setting dates
+%******************************************************************
+
+\newcommand*\setdate[2]{%
+	\d@exists{#1}{%
+		\edef\d@temp{#2}%	
+		\ifx\d@temp\d@today	
+			\setcounter{dd@#1}{\day}%
+			\setcounter{dm@#1}{\month}%
+			\setcounter{dy@#1}{\year}%
+			\d@make{#1}%
+		\else\d@syntax{#2}{%
+			\expandafter\d@set\d@temp.{#1}%
+			\d@make{#1}}%
+		\fi}}
+
+\def\d@today{today}
+
+\ifd@dmy
+	\def\d@set#1/#2/#3.#4{%
+		\setcounter{dd@#4}{#1}%
+		\setcounter{dm@#4}{#2}%
+		\setcounter{dy@#4}{#3}}
+\else
+	\def\d@set#1/#2/#3.#4{%
+		\setcounter{dy@#4}{#1}%
+		\setcounter{dm@#4}{#2}%
+		\setcounter{dd@#4}{#3}}
+\fi
+
+%******************************************************************
+% Date calc
+%******************************************************************
+
+\newcommand*\addtodate[3][days]{%
+	\@ifundefined{add#1}{\d@add@err{#1}}{\@nameuse{add#1}{#2}{#3}}}
+
+\newcommand*\adddays[2]{%
+	\d@exists{#1}{\addtocounter{dd@#1}{#2}%
+	\d@make{#1}}}
+
+\newcommand*\addmonths[2]{%
+	\d@exists{#1}{\addtocounter{dm@#1}{#2}%
+	\d@make{#1}}}
+
+\newcommand*\addyears[2]{%
+	\d@exists{#1}{\addtocounter{dy@#1}{#2}}%
+	\d@make{#1}}
+
+\newcommand*\stepdate[1]{\adddays{#1}{\@ne}}
+
+%******************************************************************
+% Date loops
+%******************************************************************
+
+\newdate{d@tempa}
+
+\newif\ifd@unless
+
+\newcommand*\ifdate[3]{%
+	\iffalse\d@unlesstrue\else\d@unlessfalse\fi
+	\d@false%
+	\setdate{d@tempa}{#3}%
+	\ifnum\theyear{#1}#2\theyear{d@tempa} \d@true\fi
+	\ifnum\theyear{#1}=\theyear{d@tempa}
+		\ifnum\themonth{#1}#2\themonth{d@tempa} \d@true\fi
+		\ifnum\themonth{#1}=\themonth{d@tempa}
+			\ifnum\theday{#1}#2\theday{d@tempa}
+			\d@true\else\d@false\fi
+		\fi
+	\fi
+	\ifd@unless\let\d@unless\unless
+	\else\let\d@unless\relax\fi
+	\d@unless\d@if}
+
+\def\d@true{\let\d@if\iftrue}
+\def\d@false{\let\d@if\iffalse}
+
+\long\def\whiledate#1#2#3\do#4{%
+	\loop\ifdate{#1}{#2}{#3}#4\repeat}
+
+%******************************************************************
+% Days between
+%******************************************************************
+
+\newdate{d@tempb}
+
+\newcounter{daysbetween}
+\newcommand*\daysbetween[2]{%
+	\setcounter{daysbetween}{0}%
+	\setdate{d@tempb}{\thedate{#1}}%
+	\ifdate{d@tempb}<{#2}
+		\whiledate{d@tempb}<{-100+#2}\do{%
+			\addtocounter{daysbetween}{100}%
+			\adddays{d@tempb}{100}}%
+		\whiledate{d@tempb}<{#2}\do{%
+			\stepcounter{daysbetween}%
+			\stepdate{d@tempb}}%
+	\else
+		\whiledate{d@tempb}>{100+#2}\do{%
+			\addtocounter{daysbetween}{100}%
+			\adddays{d@tempb}{-100}}%
+		\whiledate{d@tempb}>{#2}\do{%
+			\stepcounter{daysbetween}%
+			\adddays{d@tempb}{-1}}%
+	\fi\thedaysbetween}
+
+%******************************************************************
+% Day and month name
+%******************************************************************
+
+\newcounter{d@dayofweek}
+
+\newcommand*\calcdayofweek[1]{%
+	\d@exists{#1}{%
+	\setcounter{d@dayofweek}{\d@mod(7){%
+		\theday{#1}+\ifcase\themonth{#1}
+			\or\d@ifleapyear{#1}{-1}{0}
+			\or\d@ifleapyear{#1}{2}{3}
+			\or3\or6\or1\or4\or6\or2\or5\or0\or3\or5\fi%
+		+\d@mod(100){\theyear{#1}}%
+		+\truncdiv{\d@mod(100){\theyear{#1}}}{4}%
+		+6-2*(\d@mod(4){\truncdiv{\theyear{#1}}{100}})}}%
+	\global\@nameedef{dayofweek@#1}{\thed@dayofweek}}}
+
+\newcommand*\thedayofweek[1]{%
+	\d@exists{#1}{\@nameuse{dayofweek@#1}}}
+
+\newcommand*\dayofweek[1]{%
+	\ifcase\thedayofweek{#1}%
+		\sunday\or\monday\or\tuesday\or\wednesday
+		\or\thursday\or\friday\or\saturday\fi}
+
+\newcommand*\monthname[1]{%
+	\ifcase\themonth{#1}%
+		\or\january\or\february\or\march\or\april%
+		\or\may\or\june\or\july\or\august\or\september%
+		\or\october\or\november\or\december\fi}
+
+%******************************************************************
+% Printing dates
+%******************************************************************
+
+\newcommand*\theday[1]{\d@exists{#1}{\@nameuse{thedd@#1}}}
+\newcommand*\themonth[1]{\d@exists{#1}{\@nameuse{thedm@#1}}}
+\newcommand*\theyear[1]{\d@exists{#1}{\@nameuse{thedy@#1}}}
+
+\ifd@dmy
+	\newcommand*\thedate[1]{%
+		\d@exists{#1}{%
+			\@nameuse{thedd@#1}/\@nameuse{thedm@#1}/%
+			\@nameuse{thedy@#1}}}
+\else
+	\newcommand*\thedate[1]{%
+		\d@exists{#1}{%
+			\@nameuse{thedy@#1}/\@nameuse{thedm@#1}/%
+			\@nameuse{thedd@#1}}}
+\fi
+
+%******************************************************************
+% Language settings
+%******************************************************************
+
+\newcommand\setdaynames[7]{%
+	\def\sunday{#1}%
+	\def\monday{#2}%
+	\def\tuesday{#3}%
+	\def\wednesday{#4}%
+	\def\thursday{#5}%
+	\def\friday{#6}%
+	\def\saturday{#7}}
+
+\newcommand\setmonthnames{\d@monthnames@a}
+\def\d@monthnames@a#1#2#3#4#5#6{%
+	\def\january{#1}%
+	\def\february{#2}%
+	\def\march{#3}%
+	\def\april{#4}%
+	\def\may{#5}%
+	\def\june{#6}%
+	\d@monthnames@b}
+\def\d@monthnames@b#1#2#3#4#5#6{%
+	\edef\july{#1}%
+	\edef\august{#2}%
+	\edef\september{#3}%
+	\edef\october{#4}%
+	\edef\november{#5}%
+	\edef\december{#6}}
+
+%******************************************************************
+% Defaults
+%******************************************************************
+
+\setdaynames{Sunday}{Monday}{Tuesday}{Wednesday}%
+	{Thursday}{Friday}{Saturday}
+
+\setmonthnames{Genuary}{February}{March}{April}%
+	{May}{June}{July}{August}{September}%
+	{October}{November}{December}
+
+\InputIfFileExists{datemath.cfg}%
+	{\PackageInfo{datemath}{Date configuration file loaded}}
+	{\PackageInfo{datemath}{No configuration file found:
+		using english default}}
+
+\endinput
