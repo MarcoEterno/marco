@@ -6,12 +6,14 @@
 
 \subsection{Alcune indicazioni}
 
-Un paio di cose:
+Un paio di proposte, per uniformità:
 \begin{itemize}
+\item Ogni lezione inizia con \lstinline|\lecture{|$\langle$\textit{data}$\rangle$\lstinline|}|, dove la data è del tipo \texttt{29/2}.
 \item Per creare paragrafi numerati, non va usato \lstinline|\section|, ma \lstinline|\subsection|;
-\item Non usate il grassetto, ma il \emph{corsivo};
-\item Usate \texttt{equation}  per le equazioni, in modo che vengano tutte numerate;
-\item usare gli ambienti \lstinline|definition|, \lstinline|theorem|, \lstinline|example|.
+\item Non usate il grassetto, ma il \emph{corsivo}, soprattutto quando s'introduce un \emph{nuovo termine}, e poi si può usare il nuovo termine anche senza corsivo;
+\item Usate \texttt{equation}  per le equazioni, in modo che vengano tutte numerate; le equazioni a fine frase terminano con il punto, ma magari evitiamo altro tipo di punteggiatura alla fine di equazioni.
+\item usare molto gli ambienti \lstinline|definition|, \lstinline|theorem|, \lstinline|example|, \lstinline|remark|\dots
+\item negli elenchi, il “;” alla fine degli \emph{item} e il punto alla fine dell'ultimo. Ma se sono frasi lunghe va bene anche il punto dappertutto.
 \end{itemize}
 
 \begin{definition}[Tensore]
@@ -21,8 +23,6 @@ Un \emph{tensore} è ciò che ruota come un tensore.
 \begin{equation}
 e^{z}=\sum_{n=0}^{+\infty} \frac{z^n}{n!}.
 \end{equation}
-
-\lipsum[3]
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>

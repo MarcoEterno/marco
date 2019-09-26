@@ -2,23 +2,21 @@
 %!TeX spellcheck = it_IT
 %!TeX source = ../ML.tex
 
-\makeatletter
 \def\ml{Machine Learning}
-\makeatother
 
 \lecture{26/9}
 
-%\subsection{Contestualizzazione}
+\subsection{Contestualizzazione}
 
-L'obiettivo è insegnare ad un sistema un compito preciso, costruendo un modello utilizzabile per predire il corretto output, dopo aver esaminato un gran numero di esempi. Tale metodo di apprendimento è detto \emph{per generalizzazione}.
+L'obiettivo del \ml\ è insegnare ad un sistema un compito preciso, costruendo un modello utilizzabile per predire il corretto output, dopo aver esaminato un gran numero di esempi. Tale metodo di apprendimento è detto \emph{per generalizzazione}.
 
 È utile per esempio quando l'approccio teorico a un determinato problema è difficilmente praticabile, o quando i dati in input sono poco accurati, affetti da errore o incompleti.
-
-\subsection{Terminologia}
 
 \begin{definition}[Machine Learning]
 Il \emph{\ml} studia e propone metodi per inferire funzioni o correlazioni che, a partire da dati osservati, producano il corretto output sui \emph{samples} forniti e li generalizzino con ragionevole accuratezza.
 \end{definition}
+
+\subsection{Terminologia}
 
 Un \emph{machine learning system} si compone di \emph{dati}, \emph{tasks}, \emph{modelli}, \emph{algoritmi di apprendimento} e \emph{validazione}.
 
@@ -65,15 +63,18 @@ Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function
 \begin{definition}[Errore]
 L'errore è definito da
 \begin{equation}
-E=\frac 1l\sum_{i=1}^{l}L\big(h(x_i),d_i\big),
+E=\frac 1l\sum_{i=1}^{l}L\big(h(x_i),d_i\big)
 \end{equation}
 dove $x_i$ sono le istanze e $d_i=f(x_i)$ i valori osservati.
 \end{definition}
 
 \begin{example}
-Nei problemi di regressione spesso si usa \[L(h(x),d)=\big(d-h(x)\big)^2\]e in tal caso l'errore si dice \emph{errore quadratico medio} (MSE).
+Nei problemi di regressione spesso come loss function si usa \begin{equation}
+L(h(x),d)=\big(d-h(x)\big)^2
+\end{equation}
+e in tal caso l'errore si dice \emph{errore quadratico medio} (MSE).
 
-Se siamo di fronte a un problema di classificazione, allora è più conveniente usare la \emph{loss function} che vale $1$ se i suoi due argomenti sono uguali (e dunque la classificazione è corretta) e $0$ altrimenti.
+Se siamo di fronte a un problema di classificazione, allora è più conveniente usare la loss function che vale $1$ se i suoi due argomenti sono uguali (e dunque la classificazione è corretta) e $0$ altrimenti.
 \end{example}
 
 \begin{remark}
