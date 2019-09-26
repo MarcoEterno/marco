@@ -1,0 +1,80 @@
+%!TeX encoding = utf8
+%!TeX spellcheck = it_IT
+%!TeX source = ../ML.tex
+
+\makeatletter
+\def\ml{Machine Learning}
+\makeatother
+
+\lecture{26/9}
+
+%\subsection{Contestualizzazione}
+
+L'obiettivo è insegnare ad un sistema un compito preciso, costruendo un modello utilizzabile per predire il corretto output, dopo aver esaminato un gran numero di esempi. Tale metodo di apprendimento è detto \emph{per generalizzazione}.
+
+È utile per esempio quando l'approccio teorico a un determinato problema è difficilmente praticabile, o quando i dati in input sono poco accurati, affetti da errore o incompleti.
+
+\subsection{Terminologia}
+
+\begin{definition}[Machine Learning]
+Il \emph{\ml} studia e propone metodi per inferire funzioni o correlazioni che, a partire da dati osservati, producano il corretto output sui \emph{samples} forniti e li generalizzino con ragionevole accuratezza.
+\end{definition}
+
+Un \emph{machine learning system} si compone di \emph{dati}, \emph{tasks}, \emph{modelli}, \emph{algoritmi di apprendimento} e \emph{validazione}.
+
+\begin{definition}[Dati]
+I \emph{dati} rappresentano le \emph{esperienze disponibili}. Possono essere organizzati in un certo numero $l$ di istanze $x_p$ (\emph{samples}, \emph{instances}), ciascuno contenente $n$ attributi (\emph{features}). Con $x_{p,j}$ indicheremo l'attributo $j$-esimo della $p$-esima istanza. 
+\end{definition}
+
+Risulta conveniente indicare i valori dei vari attributi come vettori di dimensione $k$ (dove $k$ è il numero dei valori possibili) con componenti tutte nulle a parte una, in modo che valori diversi siano ortogonali.
+\begin{example}
+Se i valori possibili sono i tre colori \emph{rosso} ($R$), \emph{verde} ($G$), \emph{blu} ($B$), si pone
+\begin{equation}
+R=(1,0,0),\quad G=(0,1,0),\quad B=(0,0,1).
+\end{equation}
+\end{example}
+
+\begin{definition}[Rumore, outliers]
+Il \emph{rumore} è l'aggiunta di fattori esterni dovuta al processo di misura (e non alla legge soggiacente). Gli \emph{outliers} sono dati che si collocano molto al di fuori, rispetto agli altri.
+\end{definition}
+
+I \emph{tasks} sono in genere di due tipologie (ma ce ne sono altre):
+
+\begin{definition}[Supervised learning]
+Nel \emph{supervised learning} sono dati dei \emph{samples} di una funzione $f$ ignota, nella forma \[\langle\text{\emph{input}},\,\text{\emph{output}}\rangle\] si tratta di trovare una buona approssimazione di $f$. Gli input sono detti anche \emph{variabili indipendenti}, gli ouput \emph{variabili dipendenti} o \emph{risposte}. Se $f$ è a valori discreti, il problema si dice di \emph{classificazione}. Se l'output è costituito da valori reali, allora si parla di \emph{regressione}.
+\end{definition}
+
+\begin{definition}[Unsupervised learning]
+Nell'\emph{unsupervised learning} non si dispone di input e output nelle istanze, ma solo di dati non etichettati. Un problema tipico è quello di raggruppare tali dati secondo determinati criteri.
+\end{definition}
+
+Noi ci occuperemo soprattutto di supervised learning.
+
+\begin{definition}[Modello, ipotesi]
+Il modello cerca di descrivere la relazione tra i dati con un \emph{linguaggio}, legato alla rappresentazione dei dati. Le \emph{ipotesi} sono le funzioni $h_w$ proposte dal modello per approssimare la “vera” funzione $f$. Le ipotesi sono indicizzate da parametri ($w$) e formano uno \emph{spazio delle ipotesi} $H$.
+\end{definition}
+
+In generale non esiste un modello \emph{ottimo}: se un modello di apprendimento è il migliore in qualche problema, sarà peggiore di altri in altri problemi. Questo concetto è noto come \emph{No Free Lunch Theorem}, ovvero “non c'è un pranzo gratis” (mah, sarà qualche detto inglese, ndr). In ogni caso, questo non significa che tutti i modelli siano equivalenti.
+
+\begin{definition}[Algoritmo di apprendimento]
+Un \emph{algoritmo} di apprendimento si occupa di cercare nello spazio delle ipotesi $H$ (di un modello fissato) la migliore approssimazione della funzione $f$.
+\end{definition}
+
+Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L(h(x),d)$, che misura la distanza tra $h(x)$ e $d$, dove $d$ è il valore osservato.
+
+\begin{definition}[Errore]
+L'errore è definito da
+\begin{equation}
+E=\frac 1l\sum_{i=1}^{l}L\big(h(x_i),d_i\big).
+\end{equation}
+\end{definition}
+
+\begin{example}
+Nei problemi di regressione spesso si usa \[L(h(x),d)=\big(d-h(x)\big)^2\]e in tal caso l'errore si dice \emph{errore quadratico medio} (MSE).
+
+Se siamo di fronte a un problema di classificazione, allora è più conveniente usare la \emph{loss function} che vale $1$ se i suoi due argomenti sono uguali (e dunque la classificazione è corretta) e $0$ altrimenti.
+\end{example}
+
+\begin{remark}
+In \ml, quando si parla di \emph{performance}, si fa riferimento all'accuratezza predittiva, non all'efficienza computazionale.
+\end{remark}
