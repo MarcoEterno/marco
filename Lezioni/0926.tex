@@ -24,7 +24,12 @@ Un \emph{machine learning system} si compone di \emph{dati}, \emph{tasks}, \emph
 I \emph{dati} rappresentano le \emph{esperienze disponibili}. Possono essere organizzati in un certo numero $l$ di istanze $x_p$ (\emph{samples}, \emph{instances}), ciascuno contenente $n$ attributi (\emph{features}). Con $x_{p,j}$ indicheremo l'attributo $j$-esimo della $p$-esima istanza. 
 \end{definition}
 
-Risulta conveniente indicare i valori dei vari attributi come vettori di dimensione $k$ (dove $k$ è il numero dei valori possibili) con componenti tutte nulle a parte una, in modo che valori diversi siano ortogonali.
+%Risulta conveniente indicare i valori dei vari attributi come vettori di dimensione $k$ (dove $k$ è il numero dei valori possibili) con componenti tutte nulle a parte una, in modo che valori diversi siano ortogonali.
+
+\begin{remark}
+	Se un attributo può assumere un numero finito di valori, risulta spesso conveniente rappresentarlo come un vettore di dimensione $k$ (dove $k$ è il numero dei valori possibili) con componenti tutte nulle a parte una.
+\end{remark}
+
 \begin{example}
 Se i valori possibili sono i tre colori \emph{rosso} ($R$), \emph{verde} ($G$), \emph{blu} ($B$), si pone
 \begin{equation}
@@ -33,7 +38,7 @@ R=(1,0,0),\quad G=(0,1,0),\quad B=(0,0,1).
 \end{example}
 
 \begin{definition}[Rumore, outliers]
-Il \emph{rumore} è l'aggiunta di fattori esterni dovuta al processo di misura (e non alla legge soggiacente). Gli \emph{outliers} sono dati che si collocano molto al di fuori, rispetto agli altri.
+Il \emph{rumore} è l'aggiunta di fattori esterni dovuta al processo di misura (e non alla legge soggiacente). Gli \emph{outliers} sono dati che si collocano molto lontani rispetto agli altri.
 \end{definition}
 
 I \emph{tasks} sono in genere di due tipologie (ma ce ne sono altre):
@@ -58,7 +63,7 @@ In generale non esiste un modello \emph{ottimo}: se un modello di apprendimento 
 Un \emph{algoritmo} di apprendimento si occupa di cercare nello spazio delle ipotesi $H$ (di un modello fissato) la migliore approssimazione della funzione $f$.
 \end{definition}
 
-Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L(h(x),d)$, che misura la distanza tra $h(x)$ e $d$, dove $d=f(x)$ è il valore osservato.
+Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L\big(h(x),d\big)$, che misura la distanza tra $h(x)$ e $d$, dove $d=f(x)$ è il valore osservato.
 
 \begin{definition}[Errore]
 L'errore è definito da
@@ -70,7 +75,7 @@ dove $x_i$ sono le istanze e $d_i=f(x_i)$ i valori osservati.
 
 \begin{example}
 Nei problemi di regressione spesso come loss function si usa \begin{equation}
-L(h(x),d)=\big(d-h(x)\big)^2
+L\big(h(x),d\big)=\big(d-h(x)\big)^2
 \end{equation}
 e in tal caso l'errore si dice \emph{errore quadratico medio} (MSE).
 
