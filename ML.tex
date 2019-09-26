@@ -18,17 +18,17 @@
 \usepackage{arsclassica}
 
 % Font
-%\IfFileExists{MinionPro.sty}{
-%	\usepackage[noopticals, mathlf, minionint, loosequotes]{MinionPro}
-%	\usepackage[toc, enum]{tabfigures}
-%	\usepackage{relsize}
-%	\let\oldsum\sum\let\oldprod\prod
-%	\def\sum{\mathlarger{\oldsum}}%
-%	\def\prod{\mathlarger{\oldprod}}
-%}{
+\IfFileExists{MinionPro.sty}{
+	\usepackage[noopticals, mathlf, minionint, loosequotes]{MinionPro}
+	\usepackage[toc, enum]{tabfigures}
+	\usepackage{relsize}
+	\let\oldsum\sum\let\oldprod\prod
+	\def\sum{\mathlarger{\oldsum}}%
+	\def\prod{\mathlarger{\oldprod}}
+}{
 	\usepackage[proportional, oldstyle]{cochineal}
 	\usepackage[cochineal, vvarbb]{newtxmath}
-%}
+}
 
 % Figures
 \graphicspath{{Figure/}}
@@ -119,6 +119,10 @@
 
 \input{Files/Frontespizio}
 \input{Files/Indice}
+
+\chapter{Introduzione}
+
+\input{Lezioni/0926}
 
 \chapter{Esempi}
 
