@@ -60,13 +60,14 @@ In generale non esiste un modello \emph{ottimo}: se un modello di apprendimento 
 Un \emph{algoritmo} di apprendimento si occupa di cercare nello spazio delle ipotesi $H$ (di un modello fissato) la migliore approssimazione della funzione $f$.
 \end{definition}
 
-Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L(h(x),d)$, che misura la distanza tra $h(x)$ e $d$, dove $d$ è il valore osservato.
+Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L(h(x),d)$, che misura la distanza tra $h(x)$ e $d$, dove $d=f(x)$ è il valore osservato.
 
 \begin{definition}[Errore]
 L'errore è definito da
 \begin{equation}
-E=\frac 1l\sum_{i=1}^{l}L\big(h(x_i),d_i\big).
+E=\frac 1l\sum_{i=1}^{l}L\big(h(x_i),d_i\big),
 \end{equation}
+dove $x_i$ sono le istanze e $d_i=f(x_i)$ i valori osservati.
 \end{definition}
 
 \begin{example}
