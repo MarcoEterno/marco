@@ -13,7 +13,7 @@ L'obiettivo del \ml\ è insegnare ad un sistema un compito preciso, costruendo u
 È utile per esempio quando l'approccio teorico a un determinato problema è difficilmente praticabile, o quando i dati in input sono poco accurati, affetti da errore o incompleti.
 
 \begin{definition}[Machine Learning]
-Il \emph{\ml} studia e propone metodi per inferire funzioni o correlazioni che, a partire da dati osservati, producano il corretto output sui \emph{samples} forniti e li generalizzino con ragionevole accuratezza.
+Il \emph{\ml} studia e propone metodi per inferire funzioni o correlazioni che, a partire da dati osservati, producano un buon \emph{fit} dei \emph{samples} forniti, generalizzandoli con ragionevole accuratezza.
 \end{definition}
 
 \subsection{Terminologia}
@@ -63,7 +63,7 @@ In generale non esiste un modello \emph{ottimo}: se un modello di apprendimento 
 Un \emph{algoritmo} di apprendimento si occupa di cercare nello spazio delle ipotesi $H$ (di un modello fissato) la migliore approssimazione della funzione $f$.
 \end{definition}
 
-Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L\big(h(x),d\big)$, che misura la distanza tra $h(x)$ e $d$, dove $d=f(x)$ è il valore osservato.
+Come definiamo \emph{buona approssimazione}? Si utilizza una \emph{loss function} $L\big(h(x),d\big)$, che misura la distanza tra $h(x)$ e $d$, dove $d$ è il valore osservato (cioè $f(x)$ più eventualmente il rumore).
 
 \begin{definition}[Errore]
 L'errore è definito da
