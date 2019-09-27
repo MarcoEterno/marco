@@ -2,15 +2,17 @@
 %!TeX spellcheck = it_IT
 %!TeX source = ../ML.tex
 
-\def\ml{Machine Learning}
-
 \lecture{26/9}
 
 \subsection{Contestualizzazione}
 
-L'obiettivo del \ml\ è insegnare ad un sistema un compito preciso, costruendo un modello utilizzabile per predire il corretto output, dopo aver esaminato un gran numero di esempi. Tale metodo di apprendimento è detto \emph{per generalizzazione}.
+L'obiettivo del \ml è insegnare ad un sistema un compito preciso, costruendo un modello utilizzabile per predire il corretto output, dopo aver esaminato un gran numero di esempi. Tale metodo di apprendimento è detto \emph{per generalizzazione}.
 
 È utile per esempio quando l'approccio teorico a un determinato problema è difficilmente praticabile, o quando i dati in input sono poco accurati, affetti da errore o incompleti.
+
+\begin{remark}
+Il \ml non consente di prevedere fenomeni \emph{casuali} (come i numeri della lotteria). Inoltre non permette di inferire relazioni di \emph{causalità} tra due fenomeni tramite la sola analisi dei dati.
+\end{remark}
 
 \begin{definition}[Machine Learning]
 Il \emph{\ml} studia e propone metodi per inferire funzioni o correlazioni che, a partire da dati osservati, producano un buon \emph{fit} dei \emph{samples} forniti, generalizzandoli con ragionevole accuratezza.

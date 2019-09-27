@@ -1,0 +1,76 @@
+%!TeX encoding = utf8
+%!TeX spellcheck = it_IT
+%!TeX source = ../ML.tex
+
+\lecture{27/9}
+
+\subsection{Fitting e overfitting}
+
+\begin{definition}[Validazione]
+La \emph{validazione} valuta la capacità di generalizzazione di una determinata ipotesi, misurandone l'accuratezza.
+\end{definition}
+
+%Chiaramente il problema del \ml è che è mal condizionato: la soluzione non è unica e non è chiaro quale sia la migliore.
+
+In generale non possiamo assumere che se un'ipotesi $h$ approssima bene la funzione $f$ sui samples di allenamento, allora $h$ approssima $f$ anche su nuove istanze. C'è per esempio il problema dell'\emph{overfitting}:
+\begin{definition}[Overfitting]
+L'\emph{overfitting} avviene quando sottostimiamo l'errore sperimentale nel fitting e quindi aumenta il \emph{vero} errore sui dati sconosciuti. L'overfitting avviene quindi se il modello è troppo complesso e quindi è in grado di \emph{fittare il rumore}.
+\end{definition}
+
+\begin{example}[Fitting polinomiale]
+Supponiamo di avere una funzione reale e di voler risolvere il problema di regressione con un \emph{fit polinomiale}. Le ipotesi sono della forma \begin{equation}
+y(x,w)=\sum_{i=0}^M w_ix^i
+\end{equation}
+dove $w$ è il vettore dei coefficienti $w_i$. Si cerca di minimizzare l'errore quadratico medio. Si osserva che se il polinomio ha grado troppo basso i \emph{training samples} non vengono fittati correttamente (\emph{underfitting}). Aumentando troppo il grado del polinomio nel modello, l'errore sui \emph{training samples} diminuisce, mentre quello sui \emph{test samples} aumenta (e i coefficienti del polinomio aumentano di molto in modulo): questo comportamento è tipico dell'\emph{overfitting}.
+
+Infine, a parità di grado, si nota che aumentando il numero di dati il fitting migliora molto, indipendentemente dal fatto che ci sia molto rumore.
+\end{example}
+
+\subsection{Setting semplificato}
+
+Formalmente, quindi, disponiamo di
+\begin{itemize}
+\item una funzione $f$ ignota da approssimare;
+\item un modello con un relativo spazio di ipotesi $H$;
+\item una \emph{loss function} $L$;
+\item una distribuzione di probabilità $P(x,d)$ per lo spazio dei dati, dove $d(x)$ corrisponde alla distribuzione dei dati sperimentali ad $x$ fissato ($d$ corrisponde al valore di $f(x)$ misurato sperimentalmente, quindi affetto da rumore, e per lo stesso $x$ naturalmente si possono avere più misure).
+\end{itemize}
+L'obiettivo teorico sarebbe minimizzare il \emph{rischio}, cioè il \emph{vero errore su tutti i dati}:
+\begin{equation}
+R=\int L(h_w(x),d)\,dP(x,d).
+\end{equation}
+
+È tuttavia più praticabile lavorare con il \emph{rischio empirico}, cioè l'errore sui \emph{training samples}:
+\begin{equation}
+R\ped{emp}=\frac{1}{l}\sum L(d-h_w(x),d).
+\end{equation}
+Chiaramente non bisogna minimizzare il rischio empirico, per via dell'overfitting. Occorre considerare insieme il rischio empirico e la complessitò.
+
+Si può mostrare che, con probabilità $1-\delta$, vale
+\begin{equation}
+R\le R\ped{emp} + \varepsilon(1/l, VC, 1/\delta)
+\end{equation}
+dove $l$ è il numero di samples, $VC$ è la “complessità del modello” (il \emph{grado} del polinomio, nell'esempio del fit polinomiale) ed $\varepsilon$ è un'opportuna funzione: solitamente si assume che $\varepsilon$ sia direttamente proporzionale ai suoi due primi argomenti. Infatti, per grandi valori di $l$, il rischio $R$ è minore. Mentre per grande complessità del modello il rischio empirico $R\ped{emp}$ è minore ma il rischio $R$ può aumentare, per via dell'overfitting.
+
+\subsection{Validazione}
+
+La validazione è composta da due fasi:
+\begin{itemize}
+\item la selezione del modello (\emph{model selection}) si occupa di scegliere il modello più adatto a trattare il problema;
+\item il giudizio del modello (\emph{model assessment}) valuta la capacità predittiva del modello su \emph{test samples}.
+\end{itemize}
+In particolare si divide l'insieme di dati in TR (\emph{training set}), VL (\emph{validation set}) and TS (\emph{test set}). A questo punto avviene la \emph{model selection}, in cui
+\begin{itemize}
+\item si fissa un determinato modello e si usano i dati in TR per trovare la funzione $h$ che minimizzi il rischio empirico;
+\item si usano i dati in VL per determinare la bontà del modello;
+\item si cicla sui due step sopra al fine di determinare il modello migliore.
+\end{itemize}
+Una volta ottenuto il modello migliore (già pronto per l'utilizzo, con tutti parametri fissati dai dati in TR), si effettua il \emph{model assessment} e si valuta il comportamento sui nuovi dati presenti nel TS.
+
+\begin{example}[$k$-fold cross-validation]
+Per esempio, si può dividere l'insieme di dati per la \emph{model selection} in $k$ sottoinsiemi $D_1,\dots,D_k$ e poi, per ogni $j=1,\dots,k$ utilizzare $D_j$ come VL e tutti gli altri $D_i$ come TR.
+\end{example}
+
+\subsection{Matrice di confusione}
+
+[\dots]
