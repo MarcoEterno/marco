@@ -37,14 +37,14 @@ Formalmente, quindi, disponiamo di
 \end{itemize}
 L'obiettivo teorico sarebbe minimizzare il \emph{rischio}, cioè il \emph{vero errore su tutti i dati}:
 \begin{equation}
-R=\int L(h_w(x),d)\,dP(x,d).
+R=\int L\big(h_w(x),d\big)\,dP(x,d).
 \end{equation}
 
 È tuttavia più praticabile lavorare con il \emph{rischio empirico}, cioè l'errore sui \emph{training samples}:
 \begin{equation}
-R\ped{emp}=\frac{1}{l}\sum L(d-h_w(x),d).
+R\ped{emp}=\frac{1}{l}\sum_{i=1}^l L\big(h_w(x_i),d_i\big).
 \end{equation}
-Chiaramente non bisogna minimizzare il rischio empirico, per via dell'overfitting. Occorre considerare insieme il rischio empirico e la complessitò.
+Chiaramente non bisogna minimizzare il rischio empirico, per via dell'overfitting. Occorre considerare insieme il rischio empirico e la complessità.
 
 Si può mostrare che, con probabilità $1-\delta$, vale
 \begin{equation}
