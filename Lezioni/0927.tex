@@ -68,7 +68,7 @@ In particolare si divide l'insieme di dati in TR (\emph{training set}), VL (\emp
 Una volta ottenuto il modello migliore (già pronto per l'utilizzo, con tutti parametri fissati dai dati in TR), si effettua il \emph{model assessment} e si valuta il comportamento sui nuovi dati presenti nel TS.
 
 \begin{example}[$k$-fold cross-validation]
-Per esempio, si può dividere l'insieme di dati per la \emph{model selection} in $k$ sottoinsiemi $D_1,\dots,D_k$ e poi, per ogni $j=1,\dots,k$ utilizzare $D_j$ come VL e tutti gli altri $D_i$ come TR.
+Per esempio, si può dividere l'insieme di dati per la \emph{model selection} in $k$ sottoinsiemi $D_1,\dots,D_k$ e poi, per ogni $j=1,\dots,k$ utilizzare $D_j$ come VL e l'unione di tutti gli altri $D_i$ come TR. La bontà del modello sarà quindi data dalla ``media delle bontà'' calcolate al variare di $j$.
 \end{example}
 
 \subsection{Matrice di confusione}
